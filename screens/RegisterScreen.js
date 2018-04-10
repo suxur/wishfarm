@@ -1,22 +1,21 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image, ImageBackground} from 'react-native';
-import * as firebase from 'firebase';
-import Notification from '../Components/Notification';
-import Layout from '../constants/Layout';
+import {ActivityIndicator, Image, ImageBackground} from 'react-native';
+import {connect} from 'react-redux';
+import {NavigationActions} from 'react-navigation';
 import {
     Container,
     Text,
-    View,
     Form,
     Item,
-    Label,
     Input,
     Button,
-    Toast,
-    Content, StyleProvider
+    Content
 } from 'native-base';
+import Layout from '../constants/Layout';
+import styles from '../constants/Styles';
+import {Register} from '../store/actions';
 
-export default class Register extends Component {
+class RegisterScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -28,36 +27,32 @@ export default class Register extends Component {
     }
 
     register() {
-        let vm = this;
+        this.props.Register(this.state.email, this.state.password, this.state.password_confirmation);
+    }
 
-        if (!this.state.email) {
-            Notification.show('Email cannot be empty!');
-        } else if (!this.state.password) {
-            Notification.show('Password cannot be empty!');
-        } else if (this.state.password !== this.state.password_confirmation) {
-            Notification.show('Passwords do not match!');
-        } else {
-            firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log(errorCode);
-                console.log(errorMessage);
-
-            });
+    _renderButtonText() {
+        if (this.props.loading) {
+            return <ActivityIndicator size="small" color="#fffbfa"/>
         }
+
+        return <Text>Register</Text>
+    }
+
+    _goBack() {
+        this.props.navigation.dispatch(
+            NavigationActions.back()
+        );
     }
 
     render() {
         return (
             <ImageBackground
                 source={require("../assets/images/background-day.png")}
-
                 style={{width: Layout.window.width, height: Layout.window.height}}
             >
                 <Container>
                     <Content padder contentContainerStyle={styles.content}>
-                        <Image source={require("../assets/logo.png")} style={styles.logo }/>
+                        <Image source={require("../assets/images/logo.png")} style={styles.logo}/>
                         <Form style={styles.form}>
                             <Item regular style={styles.item}>
                                 <Input
@@ -96,10 +91,10 @@ export default class Register extends Component {
                                     onSubmitEditing={() => this.register()}
                                 />
                             </Item>
-                            <Button full warning style={styles.button} onPress={() => this.register()}>
-                                <Text style={styles.input}>Register</Text>
+                            <Button full warning disabled={this.props.loading} style={styles.button} onPress={() => this.register()}>
+                                {this._renderButtonText()}
                             </Button>
-                            <Button full light transparent style={styles.button} onPress={() => this.props.navigation.goBack()}>
+                            <Button full light transparent disabled={this.props.loading} style={styles.button} onPress={() => this._goBack()}>
                                 <Text>Login</Text>
                             </Button>
                         </Form>
@@ -110,19 +105,9 @@ export default class Register extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    content: {
-        flex: 1,
-        justifyContent: 'center'
-    },
-    logo: {
-        alignSelf: 'center',
-        marginBottom: Layout.gutter,
-    },
-    item: {
-        marginBottom: Layout.gutter,
-    },
-    button: {
-        marginBottom: Layout.gutter,
-    }
-});
+const mapStateToProps = ({app}) => {
+    const {error, loading} = app;
+    return {error, loading};
+};
+
+export default connect(mapStateToProps, {Register})(RegisterScreen);

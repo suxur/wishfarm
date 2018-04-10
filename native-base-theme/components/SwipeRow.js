@@ -34,6 +34,7 @@ export default (variables = variable) => {
 			alignSelf: 'stretch',
 			borderRadius: 0,
 		},
+        backgroundColor: variables.brandDanger
 	};
 
 	return swipeRowTheme;

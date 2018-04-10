@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import firebase from 'firebase';
 import {
     Container,
     Text,
@@ -17,14 +15,14 @@ import {
     Input,
 } from 'native-base';
 
-import Layout from '../constants/Layout';
+import {connect} from "react-redux";
+import styles from '../constants/Styles';
+import {WishAdd} from '../store/actions';
 
-export default class AddWish extends Component {
+class AddWish extends Component {
 
     constructor(props) {
         super(props);
-
-        this.user = firebase.auth().currentUser;
 
         this.state = {
             name: undefined,
@@ -34,28 +32,9 @@ export default class AddWish extends Component {
 
     addWish() {
         if (this.state.name !== undefined) {
-            this.writeWish(this.user.uid, this.state.name);
+            this.props.WishAdd(this.state.name);
             this.props.navigation.goBack();
         }
-    }
-
-    writeWish(uid, name) {
-        let wishData = {
-            uid: uid,
-            name: name,
-            harvested: false,
-            created_at: new Date()
-        };
-
-        // Get a key for a new Post.
-        let newWishKey = firebase.database().ref().child('wishes').push().key;
-
-        // Write the new post's data simultaneously in the posts list and the user's post list.
-        let updates = {};
-        updates['/wishes/' + newWishKey] = wishData;
-        updates['/user-wishes/' + uid + '/' + newWishKey] = wishData;
-
-        return firebase.database().ref().update(updates);
     }
 
     render() {
@@ -91,8 +70,4 @@ export default class AddWish extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    item: {
-        marginBottom: Layout.gutter,
-    }
-});
+export default connect(null, {WishAdd})(AddWish);

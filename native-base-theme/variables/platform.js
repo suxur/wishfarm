@@ -22,7 +22,7 @@ export default {
     badgePadding: platform === "ios" ? 3 : 0,
 
     // Button
-    btnFontFamily: platform === "ios" ? "PatrickHand" : "Roboto_medium",
+    btnFontFamily: platform === "ios" ? "Raleway" : "Raleway",
     btnDisabledBg: "#b5b5b5",
     btnDisabledClr: "#f1f1f1",
 
@@ -124,7 +124,7 @@ export default {
 
 
 // Font
-    fontFamily: platform === "ios" ? "PatrickHand" : "Roboto",
+    fontFamily: platform === "ios" ? "Raleway" : "Raleway",
     fontSizeBase: 15,
 
     get fontSizeH1() {
@@ -164,7 +164,7 @@ export default {
     toolbarIconSize: platform === "ios" ? 20 : 22,
     toolbarSearchIconSize: platform === "ios" ? 20 : 23,
     toolbarInputColor: platform === "ios" ? "#CECDD2" : "#fff",
-    searchBarHeight: platform === "ios" ? 30 : 40,
+    searchBarHeight: platform === "ios" ? 45 : 40,
     toolbarInverseBg: "#222",
     toolbarTextColor: platform === "ios" ? "#fffbfa" : "#fff",
     toolbarDefaultBorder: platform === "ios" ? "#a7a6ab" : "#3F51B5",
@@ -255,7 +255,7 @@ export default {
     noteFontSize: 14,
 
     // Title
-    titleFontfamily: platform === "ios" ? "PatrickHand" : "Roboto_medium",
+    titleFontfamily: platform === "ios" ? "Raleway" : "Raleway",
     titleFontSize: platform === "ios" ? 17 : 19,
     subTitleFontSize: platform === "ios" ? 12 : 14,
     subtitleColor: platform === "ios" ? "#8e8e93" : "#FFF",

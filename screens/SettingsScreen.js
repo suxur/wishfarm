@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import {
     Container,
     Text,
-    View,
     Button,
-    Toast,
     Content,
     Header,
     Title,
@@ -12,13 +10,15 @@ import {
     Body,
     Right,
     Icon,
-    List,
     ListItem,
-    Thumbnail, Form, Item, Input, Grid, Col, Row,
     Separator
 } from 'native-base';
 
-export default class Settings extends Component {
+class SettingsScreen extends Component {
+    static navigationOptions = {
+        title: "Settings",
+        drawerIcon: <Icon name="cog" active={true} style={{color: "#fffbfa"}}/>,
+    };
 
     constructor(props) {
         super(props);
@@ -61,3 +61,5 @@ export default class Settings extends Component {
         );
     }
 }
+
+export default SettingsScreen;

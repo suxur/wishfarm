@@ -1,65 +1,43 @@
-import {connect} from 'react-redux';
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import {Image, ImageBackground, StatusBar, AsyncStorage, ActivityIndicator} from 'react-native';
-import {Container, Text, View, Form, Item, Label, Input, Button, Toast, Content, StyleProvider} from 'native-base';
-import Notification from '../Components/Notification';
-import * as firebase from 'firebase';
+import {connect} from 'react-redux';
+import {NavigationActions} from 'react-navigation';
+import {Image, ImageBackground, StatusBar, ActivityIndicator} from 'react-native';
+import {Container, Text, Form, Item, Input, Button, Content} from 'native-base';
+import Notification from '../components/Notification';
 import Layout from '../constants/Layout';
+import styles from '../constants/Styles'
+import {Login} from '../store/actions';
 
-export default class Login extends Component {
+/**
+ * Login Screen
+ */
+class LoginScreen extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            // email: undefined,
             email: 'suxur@me.com',
+            password: 'password'
+            // email: undefined,
             // password: undefined
-            password: 'password',
-            loading: false
         };
     }
 
-    async componentWillMount() {
-        // try {
-        //     await AsyncStorage.getItem('user').then((user) => {
-        //         user = JSON.parse(user);
-        //         if (user) {
-        //             this.props.navigation.navigate('Drawer');
-        //         }
-        //     })
-        // } catch (e) {
-        //
-        // }
-
-        // Check if user is logged in... go to app.
-        // if (this.props.user) {
-        //     this.props.navigation.navigate('Drawer');
-        // }
-    }
-
     login() {
-        let vm = this;
-        this.setState({loading: true});
-
         if (!this.state.email || !this.state.password) {
             Notification.show('Email or password cannot be empty!');
         } else {
-            firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-                .then(function (user) {
-                    vm.push('Drawer');
-                    vm.setState({loading: false});
-                })
-                .catch(function (error) {
-                    Notification.show(error.message);
-                    vm.setState({loading: false});
-                });
+            this.props.Login(this.state.email, this.state.password)
         }
     }
 
-    push(route) {
-        this.props.navigation.navigate(route);
+    _navigate(route) {
+        this.props.navigation.dispatch(
+            NavigationActions.navigate({
+                routeName: route,
+            })
+        );
     }
 
     render() {
@@ -71,7 +49,7 @@ export default class Login extends Component {
                 <StatusBar barStyle="light-content"/>
                 <Container>
                     <Content padder contentContainerStyle={styles.content}>
-                        <Image source={require("../assets/logo.png")} style={styles.logo}/>
+                        <Image source={require("../assets/images/logo.png")} style={styles.logo}/>
                         <Form style={styles.form}>
                             <Item regular style={styles.item}>
                                 <Input
@@ -99,10 +77,10 @@ export default class Login extends Component {
                                     onSubmitEditing={() => this.login()}
                                 />
                             </Item>
-                            <Button full warning disabled={this.state.loading} style={styles.button} onPress={() => this.login()}>
+                            <Button full warning disabled={this.props.loading} style={styles.button} onPress={() => this.login()}>
                                 {this.buttonState()}
                             </Button>
-                            <Button full light transparent disabled={this.state.loading} style={styles.button} onPress={() => this.push('Register')}>
+                            <Button full light transparent disabled={this.props.loading} style={styles.button} onPress={() => this.props.navigation.navigate('Register')}>
                                 <Text>Register</Text>
                             </Button>
                         </Form>
@@ -113,7 +91,7 @@ export default class Login extends Component {
     }
 
     buttonState() {
-        if (this.state.loading) {
+        if (this.props.loading) {
             return <ActivityIndicator size="small" color="#fffbfa"/>
         }
 
@@ -121,19 +99,9 @@ export default class Login extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    content: {
-        flex: 1,
-        justifyContent: 'center'
-    },
-    logo: {
-        alignSelf: 'center',
-        marginBottom: Layout.gutter,
-    },
-    item: {
-        marginBottom: Layout.gutter,
-    },
-    button: {
-        marginBottom: Layout.gutter,
-    }
-});
+const mapStateToProps = ({app}) => {
+    const {error, loading} = app;
+    return {error, loading,};
+};
+
+export default connect(mapStateToProps, {Login})(LoginScreen);

@@ -1,19 +1,34 @@
-import React from 'react';
-import {StackNavigator} from 'react-navigation';
-import List from '../screens/ListScreen';
-import AddWish from '../screens/AddWishScreen';
+import React, { Component } from "react";
+import { StackNavigator } from "react-navigation";
+import { Icon } from "native-base";
+import { ListScreen } from "../screens";
+import AddWish from "../screens/AddWishScreen";
+import ShowWishScreen from "../screens/ShowWishScreen";
+import EditWishScreen from "../screens/EditWishScreen";
 
 const ListStackNavigator = StackNavigator(
     {
         List: {
-            screen: List,
+            screen: ListScreen
         },
         AddWish: {
-            screen: AddWish,
+            screen: AddWish
         },
+        ShowWishScreen: {
+            path: "wishes/:wish",
+            screen: ShowWishScreen
+        },
+        EditWishScreen: {
+            path: "wishes/:wish",
+            screen: EditWishScreen
+        }
     },
     {
-        headerMode: 'none'
+        headerMode: "none",
+        navigationOptions: () => ({
+            title: "Your Farm",
+            drawerIcon: <Icon name="leaf" active={true} style={{color: "#fffbfa"}}/>,
+        })
     }
 );
 

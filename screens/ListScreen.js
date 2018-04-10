@@ -1,118 +1,100 @@
-import React, {Component} from 'react';
-import {Alert, Animated, ListView} from 'react-native';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { NavigationActions } from "react-navigation";
 import {
     Container,
-    Text,
-    View,
-    Button,
-    Toast,
-    Content,
     Header,
     Title,
     Left,
     Body,
     Right,
-    Icon,
-    List,
-    ListItem,
-    Thumbnail, CheckBox, Form, Item, Input, Footer, FooterTab
-} from 'native-base';
+    Footer,
+    FooterTab
+} from "native-base";
 
-import HarvestList from '../Components/HarvestList';
-import GrowingList from '../Components/GrowingList';
+import HarvestList from "../components/HarvestList";
+import GrowingList from "../components/GrowingList";
+import { WishesFetch } from "../store/actions";
+import { HeaderButton, TabButton } from "../components";
 
-const styles = {
-    button: {
-        borderRadius: 0,
-        flex: 1
-    },
-    header: {
-        flex: 1,
-    }
-};
+class ListScreenComponent extends Component {
+    state = {
+        tab: "growing"
+    };
 
-export default class ListPage extends Component {
+    constructor() {
+        super();
 
-    constructor(props) {
-        super(props);
-
-        // this.top = new Animated.Value(0);
-
-        // this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-        this.state = {
-            // name: '',
-            // wishes: this.ds.cloneWithRows(),
-            tab: false
-        };
+        this.showWish = this.showWish.bind(this);
     }
 
-    pushPage(route) {
-
-        this.props.navigation.navigate(route);
+    componentWillMount() {
+        this.props.WishesFetch();
     }
 
-    // componentWillReceiveProps(props) {
-    //     this.setState({
-    //         wishes: this.ds.cloneWithRows(props.wishes)
-    //     });
-    // }
+    switchTab(tab) {
+        this.setState({ tab });
+    }
 
-    tab(tab) {
-        if (tab === 'apps') {
-            this.setState({
-                tab: true
-            });
-        } else {
-            this.setState({
-                tab: false
+    showWish(wish) {
+        this.props.navigation.dispatch(
+            NavigationActions.navigate({
+                routeName: "ShowWishScreen",
+                params: { wish }
             })
+        );
+    }
+
+    renderView() {
+        if (this.state.tab === "harvest") {
+            return <HarvestList />;
         }
+
+        return <GrowingList onPress={this.showWish} />;
     }
 
     render() {
-        let view;
-
-        if (this.state.tab) {
-            view = <HarvestList/>
-        } else {
-            view = <GrowingList/>
-        }
-
         return (
             <Container>
                 <Header>
                     <Left>
-                        <Button
-                            transparent
-                            onPress={() => this.props.screenProps.rootNavigation.navigate('DrawerOpen')}
-                        >
-                            <Icon name="menu"/>
-                        </Button>
+                        <HeaderButton icon="menu" route="DrawerOpen" />
                     </Left>
                     <Body>
-                    <Title>WishFarm</Title>
+                        <Title>WishFarm</Title>
                     </Body>
                     <Right>
-                        <Button transparent onPress={() => this.pushPage('AddWish')}>
-                            <Icon name="add"/>
-                        </Button>
                     </Right>
                 </Header>
-                {view}
+                {this.renderView()}
                 <Footer>
                     <FooterTab>
-                        <Button active={!this.state.tab} onPress={() => this.tab('navigate')}>
-                            <Icon name="leaf"/>
-                            <Text>Growing</Text>
-                        </Button>
-                        <Button active={this.state.tab} onPress={() => this.tab('apps')}>
-                            <Icon name="nutrition"/>
-                            <Text>Harvest</Text>
-                        </Button>
+                        <TabButton
+                            title="Growing"
+                            icon="leaf"
+                            active={this.state.tab === "growing"}
+                            onPress={() => this.switchTab("growing")}
+                        />
+                        <TabButton
+                            title="Harvest"
+                            icon="nutrition"
+                            active={this.state.tab === "harvest"}
+                            onPress={() => this.switchTab("harvest")}
+                        />
                     </FooterTab>
                 </Footer>
             </Container>
         );
     }
 }
+
+const mapStateToProps = ({ app }) => {
+    const { error, loading } = app;
+    return { error, loading };
+};
+
+const ListScreen = connect(mapStateToProps, { WishesFetch })(
+    ListScreenComponent
+);
+
+export { ListScreen };
