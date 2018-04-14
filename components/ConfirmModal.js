@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { Button, H2, Text } from "native-base";
 import styles from "../constants/Styles";
 
-const ConfirmModal = ({ children, visible, onAccept, onDecline }) => {
+const ConfirmModal = ({ visible, onAccept, onDecline }) => {
     return (
         <Modal isVisible={visible}>
             <View style={styles.modalContainer}>
@@ -12,8 +12,8 @@ const ConfirmModal = ({ children, visible, onAccept, onDecline }) => {
                 <Text style={styles.mb}>
                     You are about to delete this, are you sure?
                 </Text>
-                <Button block onPress={onAccept}>
-                    <Text>Ok</Text>
+                <Button block danger onPress={onAccept}>
+                    <Text>Yup!</Text>
                 </Button>
                 <Button transparent block onPress={onDecline}>
                     <Text>Close</Text>

@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
-import { H2, Text, Body, Button, ListItem, Grid, Col, View } from "native-base";
-import moment from "moment";
+import { Body, Button, Col, Grid, ListItem, Text, View } from "native-base";
 import { connect } from "react-redux";
 import ProgressBar from "./ProgressBar";
-import ConfirmModal from "./ConfirmModal";
+import { ConfirmModal } from "../components";
 import styles from "../constants/Styles";
-import { WishSave, WishDestroy } from "../store/actions";
+import { WishDestroy, WishSave } from "../store/actions";
 
 class GrowingWish extends Component {
     state = {
         wish: this.props.item,
-        modalVisible: false
+        modal_visible: false
     };
 
     harvest(wish) {
@@ -20,7 +19,7 @@ class GrowingWish extends Component {
     }
 
     deleteRow() {
-        this.setState({ modalVisible: true });
+        this.setState({ modal_visible: true });
     }
 
     _confirmDeleteRow() {
@@ -29,7 +28,7 @@ class GrowingWish extends Component {
     }
 
     _dismissModal() {
-        this.setState({ modalVisible: false });
+        this.setState({ modal_visible: false });
     }
 
     render() {
@@ -64,15 +63,10 @@ class GrowingWish extends Component {
                         </Grid>
                     </Body>
                     <ConfirmModal
-                        visible={this.state.modalVisible}
+                        visible={this.state.modal_visible}
                         onAccept={this._confirmDeleteRow.bind(this)}
                         onDecline={this._dismissModal.bind(this)}
-                    >
-                        <H2>Whoa there!</H2>
-                        <Text style={styles.mb}>
-                            You are about to delete this, are you sure?
-                        </Text>
-                    </ConfirmModal>
+                    />
                 </ListItem>
             );
         } else {

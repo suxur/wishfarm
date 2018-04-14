@@ -28,7 +28,7 @@ import Layout from "../constants/Layout";
 
 class HarvestList extends Component {
     state = {
-        modalVisible: false,
+        modal_visible: false,
         rowToDelete: {}
     };
 
@@ -53,7 +53,7 @@ class HarvestList extends Component {
 
     deleteRow(data, secId, rowId, rowMap) {
         this.setState({
-            modalVisible: true,
+            modal_visible: true,
             rowToDelete: {
                 data,
                 secId,
@@ -72,7 +72,7 @@ class HarvestList extends Component {
     _dismissModal() {
         let { secId, rowId, rowMap } = this.state.rowToDelete;
         rowMap[`${secId}${rowId}`].props.closeRow();
-        this.setState({ modalVisible: false });
+        this.setState({ modal_visible: false });
     }
 
     _onRefresh() {
@@ -113,7 +113,7 @@ class HarvestList extends Component {
                         rightOpenValue={-75}
                     />
                     <ConfirmModal
-                        visible={this.state.modalVisible}
+                        visible={this.state.modal_visible}
                         onAccept={this._confirmDeleteRow.bind(this)}
                         onDecline={this._dismissModal.bind(this)}
                     >

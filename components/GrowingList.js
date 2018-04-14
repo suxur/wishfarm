@@ -209,7 +209,7 @@ class GrowingList extends Component {
                             }}
                         />
                         <ConfirmModal
-                            visible={this.state.modalVisible}
+                            visible={this.state.modal_visible}
                             onAccept={this._confirmDeleteRow.bind(this)}
                             onDecline={this._dismissModal.bind(this)}
                         />
