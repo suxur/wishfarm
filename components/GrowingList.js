@@ -146,10 +146,10 @@ class GrowingList extends Component {
                                         });
                                     }}
                                 />
+                                <Button warning onPress={() => this.addWish()}>
+                                    <Icon name="add" />
+                                </Button>
                             </Item>
-                            <Button warning onPress={() => this.addWish()}>
-                                <Icon name="add" />
-                            </Button>
                         </Header>
                         <Content
                             keyboardShouldPersistTaps="always"
@@ -231,10 +231,32 @@ class GrowingList extends Component {
         }
 
         return (
-            <View style={styles.container_empty}>
-                <H2>No Wishes!</H2>
-                <Text> Add some wishes to get growing! </Text>
-                <Image source={require("../assets/images/barn.png")} />
+            <View style={{ flex: 1, height: Layout.window.height, marginTop: 0 }}>
+                <Container>
+                    <Header searchBar rounded>
+                        <Item>
+                            <Icon name="leaf" />
+                            <Input
+                                ref="AddWishInput"
+                                placeholder="I wish I had a..."
+                                onChangeText={name =>
+                                    this.setState({ name })
+                                }
+                                value={this.state.name}
+                            />
+                            <Button warning onPress={() => this.addWish()}>
+                                <Icon name="add" />
+                            </Button>
+                        </Item>
+                    </Header>
+                </Container>
+                <View style={styles.container_empty}>
+                    <Content>
+                        <H2>No Wishes!</H2>
+                        <Text> Add some wishes to get growing! </Text>
+                        <Image source={require("../assets/images/barn.png")} />
+                    </Content>
+                </View>
             </View>
         );
     }
