@@ -32,7 +32,7 @@ class GrowingList extends Component {
     state = {
         headerMargin: new Animated.Value(0),
         name: "",
-        modalVisible: false,
+        modal_visible: false,
         edit_modal: false,
         editwish: {},
         refreshing: false,
@@ -62,7 +62,7 @@ class GrowingList extends Component {
 
     deleteRow(data, secId, rowId, rowMap) {
         this.setState({
-            modalVisible: true,
+            modal_visible: true,
             rowToDelete: {
                 data,
                 secId,
@@ -81,7 +81,7 @@ class GrowingList extends Component {
     _dismissModal() {
         let { secId, rowId, rowMap } = this.state.rowToDelete;
         rowMap[`${secId}${rowId}`].props.closeRow();
-        this.setState({ modalVisible: false });
+        this.setState({ modal_visible: false });
     }
 
     _onRefresh() {
