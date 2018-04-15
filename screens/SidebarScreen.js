@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Image } from "react-native";
 import { DrawerItems, SafeAreaView } from "react-navigation";
-import { Container, Content, Icon, Left, ListItem, View } from "native-base";
+import { Button, Container, Content, Icon, Left, ListItem, Text, View } from "native-base";
 import { connect } from "react-redux";
 import styles from "../constants/Styles";
 import { Logout } from "../store/actions";
@@ -29,6 +29,9 @@ class Sidebar extends Component {
                                 style={styles.sidebarLogo}
                             />
                             <DrawerItems {...this.props} />
+                            <Button full transparent onPress={this.props.Logout}>
+                                <Text>Logout</Text>
+                            </Button>
                         </SafeAreaView>
                     </View>
                 </Content>

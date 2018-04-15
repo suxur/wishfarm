@@ -71,6 +71,7 @@ class RegisterScreen extends Component {
                                 <Input
                                     ref="PasswordInput"
                                     onChangeText={password => this.setState({password})}
+                                    autoCapitalize="none"
                                     secureTextEntry
                                     placeholder="Password"
                                     returnKeyType="next"
@@ -84,6 +85,7 @@ class RegisterScreen extends Component {
                                 <Input
                                     ref="PasswordConfirmInput"
                                     onChangeText={password_confirmation => this.setState({password_confirmation})}
+                                    autoCapitalize="none"
                                     secureTextEntry
                                     placeholder="Confirm Password"
                                     returnKeyType="go"
