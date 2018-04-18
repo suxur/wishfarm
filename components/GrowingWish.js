@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { Body, Button, Col, Grid, ListItem, Text, View } from "native-base";
 import { connect } from "react-redux";
-import ProgressBar from "./ProgressBar";
-import { ConfirmModal } from "../components";
+import { ConfirmModal, ProgressBar } from "../components";
 import styles from "../constants/Styles";
 import { WishDestroy, WishSave } from "../store/actions";
 

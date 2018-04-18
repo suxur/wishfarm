@@ -126,8 +126,11 @@ export default (variables = variable) => {
         },
         ".rounded": {
             "NativeBase.Item": {
-                borderTopLeftRadius: 5,
-                borderBottomLeftRadius: 5
+                borderRadius: 5,
+                "NativeBase.Button": {
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0
+                }
             }
         },
         "NativeBase.Left": {

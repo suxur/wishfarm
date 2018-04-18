@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 
-export default class ProgressBar extends Component {
+class ProgressBar extends Component {
     render() {
         let days = 30;
         let complete = 1;
@@ -45,3 +45,5 @@ let styles = StyleSheet.create({
         borderRadius
     }
 });
+
+export { ProgressBar };

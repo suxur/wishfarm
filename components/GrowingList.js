@@ -26,7 +26,7 @@ import GrowingWish from "./GrowingWish";
 import old from "../constants/Styles";
 import Layout from "../constants/Layout";
 import { WishAdd, WishDestroy, WishesFetch } from "../store/actions";
-import { ConfirmModal, EditModal } from "../components";
+import { AddWishHeader, ConfirmModal, EditModal } from "../components";
 
 class GrowingList extends Component {
     state = {
@@ -41,7 +41,10 @@ class GrowingList extends Component {
 
     constructor() {
         super();
+
         this.editWish = this.editWish.bind(this);
+        this.hideHeader = this.hideHeader.bind(this);
+        this.showHeader = this.showHeader.bind(this);
     }
 
     componentWillMount() {
@@ -88,21 +91,28 @@ class GrowingList extends Component {
         this.props.WishesFetch();
     }
 
-    addWish() {
-        if (this.state.name !== undefined) {
-            this.props.WishAdd(this.state.name);
-            this.setState({ name: "" });
-            this.refs.AddWishInput.wrappedInstance.focus();
-            setTimeout(() => {
-                this.refs.GrowingContent._root.scrollToEnd();
-            }, 50);
-        }
-    }
-
     editWish(wish) {
         this.setState({
             edit_modal: true,
             editwish: wish
+        });
+    }
+
+    hideHeader() {
+        Animated.timing(this.state.headerMargin, {
+            toValue: -49,
+            duration: 300
+        }).start();
+    }
+
+    showHeader() {
+        Animated.timing(this.state.headerMargin, {
+            toValue: 0,
+            duration: 300
+        }).start(() => {
+            if (typeof this.refs.GrowingContent !== "undefined") {
+                this.refs.GrowingContent._root.scrollToPosition(0);
+            }
         });
     }
 
@@ -113,44 +123,11 @@ class GrowingList extends Component {
                     style={{ flex: 1, marginTop: this.state.headerMargin }}
                 >
                     <Container>
-                        <Header searchBar rounded>
-                            <Item>
-                                <Icon name="leaf" />
-                                <Input
-                                    ref="AddWishInput"
-                                    placeholder="Wish"
-                                    onChangeText={name =>
-                                        this.setState({ name })
-                                    }
-                                    value={this.state.name}
-                                    onFocus={() => {
-                                        Animated.timing(
-                                            this.state.headerMargin,
-                                            {
-                                                toValue: -49,
-                                                duration: 300
-                                            }
-                                        ).start();
-                                    }}
-                                    onEndEditing={() => {
-                                        Animated.timing(
-                                            this.state.headerMargin,
-                                            {
-                                                toValue: 0,
-                                                duration: 300
-                                            }
-                                        ).start(() => {
-                                            this.refs.GrowingContent._root.scrollToPosition(
-                                                0
-                                            );
-                                        });
-                                    }}
-                                />
-                                <Button warning onPress={() => this.addWish()}>
-                                    <Icon name="add" />
-                                </Button>
-                            </Item>
-                        </Header>
+                        <AddWishHeader
+                            onFocus={this.hideHeader}
+                            onEndEditing={this.showHeader}
+                            list={this.refs.GrowingContent}
+                        />
                         <Content
                             keyboardShouldPersistTaps="always"
                             refreshControl={
@@ -218,45 +195,37 @@ class GrowingList extends Component {
             );
         } else {
             return (
-                <Content padder contentContainerStyle={old.content}>
-                    {this.loadingState()}
-                </Content>
+                <Animated.View
+                    style={{ flex: 1, marginTop: this.state.headerMargin }}
+                >
+                    <Container>{this.loadingState()}</Container>
+                </Animated.View>
             );
         }
     }
 
     loadingState() {
         if (this.props.loading) {
-            return <ActivityIndicator size="small" color="#25283d" />;
+            return (
+                <Content padder contentContainerStyle={old.content}>
+                    <ActivityIndicator size="small" color="#25283d" />;
+                </Content>
+            );
         }
 
         return (
-            <View style={{ flex: 1, height: Layout.window.height, marginTop: 0 }}>
-                <Container>
-                    <Header searchBar rounded>
-                        <Item>
-                            <Icon name="leaf" />
-                            <Input
-                                ref="AddWishInput"
-                                placeholder="I wish I had a..."
-                                onChangeText={name =>
-                                    this.setState({ name })
-                                }
-                                value={this.state.name}
-                            />
-                            <Button warning onPress={() => this.addWish()}>
-                                <Icon name="add" />
-                            </Button>
-                        </Item>
-                    </Header>
-                </Container>
-                <View style={styles.container_empty}>
-                    <Content>
+            <View style={{ flex: 1 }}>
+                <AddWishHeader
+                    onFocus={this.hideHeader}
+                    onEndEditing={this.showHeader}
+                />
+                <Content padder>
+                    <View style={styles.container_empty}>
                         <H2>No Wishes!</H2>
                         <Text> Add some wishes to get growing! </Text>
                         <Image source={require("../assets/images/barn.png")} />
-                    </Content>
-                </View>
+                    </View>
+                </Content>
             </View>
         );
     }
@@ -266,7 +235,7 @@ const styles = StyleSheet.create({
     container_empty: {
         alignItems: "center",
         height: Layout.window.h_half,
-        justifyContent: "space-around"
+        justifyContent: "center"
     }
 });
 
