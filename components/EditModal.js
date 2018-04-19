@@ -1,9 +1,10 @@
 import React from "react";
 import Modal from "react-native-modal";
 import { View, StyleSheet, DatePickerIOS, Platform } from "react-native";
-import DatePicker from 'react-native-datepicker'
+import DatePicker from "react-native-datepicker";
 import { Button, Form, Item, Label, Input, Text } from "native-base";
 import old from "../constants/Styles";
+import variable from "../native-base-theme/variables/platform";
 import Layout from "../constants/Layout";
 
 const setDate = () => {};
@@ -18,41 +19,34 @@ const EditModal = ({ wish, visible, onAccept, onDecline }) => {
     return (
         <Modal isVisible={visible}>
             <View style={styles.modalContainer}>
-                <Form>
+                <Form style={styles.form}>
                     <Label>Name:</Label>
                     <Item regular style={[old.item, styles.input]}>
                         <Input
+                            style={styles.item}
                             onChangeText={name => this.setState({ name })}
                             placeholder="Name"
                             value={wish.name}
                         />
                     </Item>
                     <Label>Added:</Label>
-                    {Platform.OS === 'ios' ?
-                        <DatePickerIOS date={date} onDateChange={setDate} /> :
+                    {Platform.OS === "ios" ? (
+                        <DatePickerIOS date={date} onDateChange={setDate} />
+                    ) : (
                         <DatePicker
                             style={styles.datePickerAndroid}
                             date={date}
                             mode="date"
-                            onDateChange={setDate} />
-                    }
-
+                            onDateChange={setDate}
+                        />
+                    )}
                 </Form>
-                {/*<Button block onPress={() => this.updateWish()}>*/}
                 <Button block>
                     <Text>Update</Text>
                 </Button>
                 <Button block transparent onPress={onDecline}>
                     <Text>Cancel</Text>
                 </Button>
-                {/*<View style={styles.modalButtonContainer}>*/}
-                {/*<Button style={styles.mr} small light onPress={onDecline}>*/}
-                {/*<Text>Close</Text>*/}
-                {/*</Button>*/}
-                {/*<Button small onPress={onAccept}>*/}
-                {/*<Text>Ok</Text>*/}
-                {/*</Button>*/}
-                {/*</View>*/}
             </View>
         </Modal>
     );
@@ -63,8 +57,20 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: Layout.gutter,
         backgroundColor: "white"
-        // justifyContent: "center",
-        // alignItems: "center"
+    },
+    modalContainer: {
+        borderRadius: 15,
+        padding: Layout.gutter,
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    form: {
+        alignSelf: "stretch"
+    },
+    item: {
+        borderWidth: variable.borderWidth * 2,
+        borderColor: variable.inputBorderColor,
     },
     input: {
         justifyContent: "center",
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
     datePickerAndroid: {
         width: Layout.window.width - 49,
         backgroundColor: "#fff",
-        alignSelf: 'center',
+        alignSelf: "center",
         marginBottom: 30
     }
 });
