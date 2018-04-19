@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "react-native-modal";
-import { View, StyleSheet, DatePickerIOS } from "react-native";
+import { View, StyleSheet, DatePickerIOS, Platform } from "react-native";
+import DatePicker from 'react-native-datepicker'
 import { Button, Form, Item, Label, Input, Text } from "native-base";
 import old from "../constants/Styles";
 import Layout from "../constants/Layout";
@@ -27,7 +28,15 @@ const EditModal = ({ wish, visible, onAccept, onDecline }) => {
                         />
                     </Item>
                     <Label>Added:</Label>
-                    <DatePickerIOS date={date} onDateChange={setDate} />
+                    {Platform.OS === 'ios' ?
+                        <DatePickerIOS date={date} onDateChange={setDate} /> :
+                        <DatePicker
+                            style={styles.datePickerAndroid}
+                            date={date}
+                            mode="date"
+                            onDateChange={setDate} />
+                    }
+
                 </Form>
                 {/*<Button block onPress={() => this.updateWish()}>*/}
                 <Button block>
@@ -60,6 +69,12 @@ const styles = StyleSheet.create({
     input: {
         justifyContent: "center",
         alignSelf: "stretch"
+    },
+    datePickerAndroid: {
+        width: Layout.window.width - 49,
+        backgroundColor: "#fff",
+        alignSelf: 'center',
+        marginBottom: 30
     }
 });
 
