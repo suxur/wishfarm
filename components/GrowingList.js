@@ -119,9 +119,7 @@ class GrowingList extends Component {
     render() {
         if (this.list.getRowCount() > 0) {
             return (
-                <Animated.View
-                    style={{ flex: 1, marginTop: this.state.headerMargin }}
-                >
+                <Animated.View style={styles.container_list}>
                     <Container>
                         <AddWishHeader
                             onFocus={this.hideHeader}
@@ -195,9 +193,7 @@ class GrowingList extends Component {
             );
         } else {
             return (
-                <Animated.View
-                    style={{ flex: 1, marginTop: this.state.headerMargin }}
-                >
+                <Animated.View style={this.styles.container_list}>
                     <Container>{this.loadingState()}</Container>
                 </Animated.View>
             );
@@ -229,6 +225,7 @@ class GrowingList extends Component {
             </View>
         );
     }
+
 }
 
 const styles = StyleSheet.create({
@@ -236,6 +233,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: Layout.window.h_half,
         justifyContent: "center"
+    },
+    container_list: {
+        flex: 1
     }
 });
 

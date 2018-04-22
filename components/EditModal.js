@@ -16,6 +16,18 @@ const EditModal = ({ wish, visible, onAccept, onDecline }) => {
         date = new Date(wish.created_at);
     }
 
+    function renderDatePicker(){
+        if(Platform.OS === "ios"){
+            return <DatePickerIOS date={date} onDateChange={setDate} />;
+        }
+        return <DatePicker
+            style={styles.datePickerAndroid}
+            date={date}
+            mode="date"
+            onDateChange={setDate}
+        />;
+    }
+
     return (
         <Modal isVisible={visible}>
             <View style={styles.modalContainer}>
@@ -30,16 +42,7 @@ const EditModal = ({ wish, visible, onAccept, onDecline }) => {
                         />
                     </Item>
                     <Label>Added:</Label>
-                    {Platform.OS === "ios" ? (
-                        <DatePickerIOS date={date} onDateChange={setDate} />
-                    ) : (
-                        <DatePicker
-                            style={styles.datePickerAndroid}
-                            date={date}
-                            mode="date"
-                            onDateChange={setDate}
-                        />
-                    )}
+                    { renderDatePicker() }
                 </Form>
                 <Button block>
                     <Text>Update</Text>

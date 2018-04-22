@@ -34,21 +34,10 @@ const styles = StyleSheet.create({
         fontFamily,
         fontSize: 25
     },
-    // item: {
-    // borderRadius: 5,
-    // flex: 1,
-    // top: 0,
-    // bottom: 0,
-    // height: 'auto',
-    // borderBottomWidth: 0
-    // },
     input: {
         height: "auto",
         fontFamily
     },
-    // button: {
-    //     borderRadius: 0,
-    // },
 
     button: {
         marginBottom: Layout.gutter
