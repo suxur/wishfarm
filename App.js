@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+import { NetInfo, StyleSheet } from "react-native";
 import { Provider } from "react-redux";
 import firebase from "firebase";
-import { Root, StyleProvider } from "native-base";
+import { Root, StyleProvider, Text, View } from "native-base";
 import { AppLoading, Asset, Font } from "expo";
 import { PersistGate } from "redux-persist/integration/react";
 import getTheme from "./native-base-theme/components";
@@ -33,10 +34,33 @@ function cacheFonts(fonts) {
 export let navigation;
 
 class App extends Component {
-    state = { isReady: false };
+    state = { isReady: false, has_connectivity: true };
+
+    constructor() {
+        super();
+        this.handleFirstConnectivityChange = this.handleFirstConnectivityChange.bind(
+            this
+        );
+    }
 
     componentDidMount() {
+        const vm = this;
         navigation = this.navigator;
+
+        NetInfo.addEventListener(
+            "connectionChange",
+            vm.handleFirstConnectivityChange
+        );
+    }
+
+    handleFirstConnectivityChange(connectionInfo) {
+        let has_connectivity = true;
+
+        if (connectionInfo.type === "none") {
+            has_connectivity = false;
+        }
+
+        this.setState({ has_connectivity });
     }
 
     async _loadAssetsAsync() {
@@ -58,6 +82,21 @@ class App extends Component {
         await Promise.all([...imageAssets, ...fontAssets]);
     }
 
+    showConnectionStatus() {
+        if (!this.state.has_connectivity) {
+            return (
+                <View style={style.statusBar}>
+                    <Text style={style.statusBarText}>
+                        Network Connection Required
+                    </Text>
+                    <Text style={style.statusBarText}>
+                        Please connect your device to continue
+                    </Text>
+                </View>
+            );
+        }
+    }
+
     render() {
         if (!this.state.isReady) {
             return (
@@ -74,6 +113,7 @@ class App extends Component {
                     <PersistGate loading={null} persistor={persistor}>
                         <StyleProvider style={getTheme()}>
                             <Root>
+                                {this.showConnectionStatus()}
                                 <RootNavigation
                                     ref={navigatorRef => {
                                         NavigationService.setTopLevelNavigator(
@@ -89,5 +129,17 @@ class App extends Component {
         }
     }
 }
+
+const style = StyleSheet.create({
+    statusBar: {
+        backgroundColor: "red",
+        padding: 10,
+        paddingTop: 20,
+        alignItems: "center"
+    },
+    statusBarText: {
+        color: "#fff"
+    }
+});
 
 export default App;
