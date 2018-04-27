@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
+import { connect } from "react-redux";
 
-class ProgressBar extends Component {
+class ProgressBarComponent extends Component {
     render() {
-        let days = 30;
+        let days = this.props.days;
         let complete = 1;
         let incomplete = 0;
 
@@ -45,5 +46,12 @@ let styles = StyleSheet.create({
         borderRadius
     }
 });
+
+const mapStateToProps = ({ settings }) => {
+    const { days } = settings;
+    return { days };
+};
+
+const ProgressBar = connect(mapStateToProps)(ProgressBarComponent);
 
 export { ProgressBar };
