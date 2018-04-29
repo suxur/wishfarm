@@ -12,3 +12,7 @@ export const WISH_UPDATE = "wish_update";
 export const WISHES_FETCH_SUCCESS = "wishes_fetch_success";
 
 export const RESET = "reset";
+
+// Settings
+export const UPDATE_DAYS = "update_days";
+export const TOGGLE_PUSH_NOTIFICATIONS = "toggle_push_notifications";

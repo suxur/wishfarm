@@ -33,7 +33,7 @@ class GrowingWish extends Component {
     render() {
         let wish = this.props.item;
 
-        if (wish.days >= 30) {
+        if (wish.days >= this.props.days) {
             return (
                 <ListItem style={styles.row}>
                     <Body>
@@ -135,4 +135,9 @@ const s = StyleSheet.create({
     }
 });
 
-export default connect(null, { WishSave, WishDestroy })(GrowingWish);
+const mapStateToProps = ({ settings }) => {
+    const { days } = settings;
+    return { days };
+};
+
+export default connect(mapStateToProps, { WishSave, WishDestroy })(GrowingWish);
